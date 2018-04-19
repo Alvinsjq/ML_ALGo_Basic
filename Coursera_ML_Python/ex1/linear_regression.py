@@ -25,20 +25,20 @@ def _plot_J(J_histroy):
     plt.figure(figsize=(10,6));
     plt.plot(range(len(J_histroy)),J_histroy,'ro');
     plt.grid(True);
-    plt.title("Cost函数的收敛情况");
+    plt.title("Convergence of Cost Function");
     plt.xlabel("Iterations");
-    plt.ylabel("Cost函数值:J");
+    plt.ylabel("Cost:J");
     
 
     
 def _ComputerCost(X,y,theta):
      #这里实现损失函数的计算方法，
-     #theta是n维向量 n*1
-     #X是增加了一个截矩项的特征向量矩阵 m*n
+     #theta是n维向量 以及 截距项 因此为 （n+1）*1
+     #X是增加了一个截矩项的特征向量矩阵 m*(n+1)
      #y是对应真实的估计值向量 m*1
      m = y.size;
-     hyp = np.dot(X,theta);
-     a = hyp - y;
+     hyp = np.dot(X,theta); # 这里的hyp是 (theta_0*x1 + theta_1)
+     a = hyp - y;  
      coef = 1./(2*m);
      J = coef * np.dot(a.T,a);#返回一个实数
      return float(J); 
@@ -77,8 +77,8 @@ _plot(X,y);
 # =====================损失函数==================
 
 b = np.ones((X.shape[0],1));
-X = np.concatenate((X,b),axis=1);
-init_theta = np.zeros((X.shape[1],1))
+X = np.concatenate((X,b),axis=1); # X此时为 m*(n+1),注意，这边是先X再1，这会影响到theta的系数的分配
+init_theta = np.zeros((X.shape[1],1)) #  初始化的theta为 (n+1)*1
 
 J = _ComputerCost(X,y,init_theta);
 print(J);
@@ -93,7 +93,7 @@ print(theta);
 
 _plot_J(J_histroy);
 _plot(X[:,0],y);
-plt.plot(X[:,0],theta[0]*X[:,0]+theta[1],'b-'); # 画出hyp函数
+plt.plot(X[:,0],theta[0]*X[:,0]+theta[1],'b-'); # 画出hyp函数(theta_0*x1 + theta_1)
 
 
 # =======================可视化J函数==================
